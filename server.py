@@ -21,6 +21,21 @@ class chatUser():
 	def setName(self, newName):
 		self.name = newName
 	
+class singleListen(threading.Thread):
+	def __init__(self, name, address, socket):
+		threading.Thread.__init__(self)
+		self.name = name
+		self.address = address
+		self.socket = socket
+	def run(self):
+		print("SingleListen for %s is set up" % self.name)
+		global running
+		global message
+		clientsocket = self.socket
+		while running:
+			msg = clientsocket.recv(1024)
+			message = str(msg.decode('ascii'))
+
 #connectionThread takes care of new connections, and adds new users to the users list (maybe DONE)
 class connectionThread (threading.Thread):
 	def __init__(self):
@@ -42,6 +57,8 @@ class connectionThread (threading.Thread):
 			user.setName(newName)
 			print("%s is now known as %s" % (user.address, user.name))
 			users.append(user)
+			listens.append(singleListen(user.name, user.address, user.socket))
+			listens[(userNum-1)].start()
 			
 #processThread says goodbye to a user, manages quits, and transmits messages to other users
 class processThread (threading.Thread):
@@ -57,8 +74,7 @@ class listenThread (threading.Thread):
 	def run(self):
 		print("Listening thread initialized.")
 		global running
-			
-		
+					
 #commandThread is processing the server terminal commands (Done for now, new functions coming)
 class commandThread (threading.Thread):
 	def __init__(self):
@@ -71,10 +87,12 @@ class commandThread (threading.Thread):
 			command = input("")
 			time.sleep(1)
 		
+listens = []
 users = []
 userNum = 0
 running = True
 command = ""
+message = ""
 #
 #Have to do:
 #Listen to new connections, and manage users -> connectionThread
