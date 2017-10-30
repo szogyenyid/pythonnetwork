@@ -1,4 +1,5 @@
 import socket
+import threading
 
 def makeConnection():
 	global serversocket
@@ -16,7 +17,11 @@ makeConnection()
 while True:
 	clientsocket,addr = serversocket.accept()      
 	print("Got a connection from %s" % str(addr[0]))
-	msg = 'Thank you for connecting'+ "\r\n"
+	msg = 'SERVER: Thank you for connecting'+ "\r\n"
 	clientsocket.send(msg.encode('ascii'))
-	clientsocket.close()
+	while True:
+		msg = clientsocket.recv(1024)
+		clientsocket.send(msg)
+		msg = ''
 #doing stuff ends here
+dummy = input("Quit")
