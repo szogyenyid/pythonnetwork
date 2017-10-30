@@ -9,7 +9,7 @@ serversocket.listen(5)
 
 while True:
 	clientsocket,addr = serversocket.accept()      
-	print("Got a connection from %s" % str(addr))
+	print("Got a connection from %s" % str(addr[0]))
 	msg = 'Thank you for connecting'+ "\r\n"
 	clientsocket.send(msg.encode('ascii'))
 	clientsocket.close()
