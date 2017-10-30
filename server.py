@@ -21,6 +21,7 @@ class chatUser():
 	def setName(self, newName):
 		self.name = newName
 	
+#connectionThread takes care of new connections, and adds new users to the users list
 class connectionThread (threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
@@ -42,13 +43,15 @@ class connectionThread (threading.Thread):
 			print("%s is now known as %s" % (user.address, user.name))
 			users.append(user)
 			
+#processThread says goodbye to a user, manages quits, and transmits messages to other users
 class processThread (threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
 	def run(self):
 		print("Processing thread initialized.")
 	
-class listenThread (threading.Thread):
+#listenThread is listening for messages from all users
+class listenThread (threading.Thread): 
 	def __init__(self):
 		threading.Thread.__init__(self)
 	def run(self):
@@ -56,7 +59,7 @@ class listenThread (threading.Thread):
 		global running
 			
 		
-
+#commandThread is processing the server terminal commands
 class commandThread (threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
@@ -79,6 +82,7 @@ data = ""
 #Lisiten to new messages -> listenThread
 #Send new messages to everyone but sender -> processThread
 #change username -> processThread
+#when msg is "!quit" send back a goodbye message
 #
 #doing stuff
 makeConnection()
