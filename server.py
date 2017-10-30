@@ -35,13 +35,14 @@ class singleListen(threading.Thread):
 		global userNum
 		global listens
 		clientsocket = self.socket
-		print("SingleListen for %s is set up" % self.name)
+		print("SingleListen for %s is set up" % self.address)
 		msg = clientsocket.recv(1024)
 		newName = str(msg.decode('ascii'))
 		self.Name = newName
 		for x in users:
 			if (self.id == x.id):
 				x.setName(newName)
+				continue
 		print("%s is now known as %s" % (self.address, newName))
 		while running:
 			msg = clientsocket.recv(1024)
@@ -54,7 +55,7 @@ class singleListen(threading.Thread):
 				print("%s has quit, his message listener set to null" % self.name)
 				continue
 			else:
-				message = str(msg.decode('ascii'))
+				message = ("%s: %s" % (self.name.toupper(), str(msg.decode('ascii'))))
 				continue
 
 #connectionThread takes care of new connections, and adds new users to the users list (maybe DONE)
