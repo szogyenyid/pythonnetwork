@@ -36,6 +36,13 @@ class singleListen(threading.Thread):
 		global listens
 		clientsocket = self.socket
 		print("SingleListen for %s is set up" % self.name)
+		msg = clientsocket.recv(1024)
+		newName = str(msg.decode('ascii'))
+		self.Name = newName
+		for x in users:
+			if (self.id == x.id):
+				x.setName(newName)
+		print("%s is now known as %s" % (self.address, newName))
 		while running:
 			msg = clientsocket.recv(1024)
 			if (str(msg.decode('ascii')) == "!quit"):
@@ -67,10 +74,6 @@ class connectionThread (threading.Thread):
 			print("Got a connection from %s, total users: %d" % ( user.address, userNum))
 			msg = "***Welcome to the server! Your next message will be your username.***"
 			clientsocket.send(msg.encode('ascii'))
-			msg = clientsocket.recv(1024)
-			newName = str(msg.decode('ascii'))
-			user.setName(newName)
-			print("%s is now known as %s" % (user.address, user.name))
 			users.append(user)
 			listens.append(singleListen(user.id, user.name, user.address, user.socket))
 			listens[(nextID-1)].start()
