@@ -56,6 +56,14 @@ class singleListen(threading.Thread):
 				break
 			else:
 				message = ("%s: %s" % (self.name.upper(), str(msg.decode('ascii'))))
+				for x in users:
+					if(message == ""):
+						break
+					if(x.id == self.id):
+						continue
+					else:
+						x.socket.send(message.encode('ascii'))
+				message = ""
 				continue
 
 #connectionThread takes care of new connections, and adds new users to the users list (maybe DONE)
@@ -79,13 +87,6 @@ class connectionThread (threading.Thread):
 			users.append(user)
 			listens.append(singleListen(user.id, user.name, user.address, user.socket))
 			listens[(nextID-1)].start()
-			
-#processThread transmits messages to other users
-class processThread (threading.Thread):
-	def __init__(self):
-		threading.Thread.__init__(self)
-	def run(self):
-		print("Processing thread initialized.")
 
 					
 #commandThread is processing the server terminal commands (Done for now, new functions coming)
@@ -110,7 +111,7 @@ def listOfUsers():
 	for x in users:
 		print(x.id, x.name, x.address)
 	print()
-		
+
 		
 listens = []
 users = []
