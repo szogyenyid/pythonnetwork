@@ -51,7 +51,7 @@ class singleListen(threading.Thread):
 				msg = "***Goodbye, dear user! :')***"
 				clientsocket.send(msg.encode('ascii'))
 				userNum = userNum-1
-				print("%s has quit, his message listener set to null" % self.name)
+				print("%s has quit, his message listener set to null" % x.name)
 				listens[self.id] = ""
 				break
 			else:
@@ -71,6 +71,7 @@ class connectionThread (threading.Thread):
 		while running:
 			clientsocket,addr = serversocket.accept()
 			user = chatUser(nextID, "", str(addr[0]),clientsocket)
+			userNum = userNum+1
 			nextID = nextID+1
 			print("Got a connection from %s, total users: %d" % ( user.address, userNum))
 			msg = "***Welcome to the server! Your next message will be your username.***"
@@ -108,6 +109,7 @@ def listOfUsers():
 	print("ID | Name | Address")
 	for x in users:
 		print(x.id, x.name, x.address)
+	print()
 		
 		
 listens = []
