@@ -35,6 +35,11 @@ class singleListen(threading.Thread):
 		while running:
 			msg = clientsocket.recv(1024)
 			message = str(msg.decode('ascii'))
+			if (message == "!quit"):
+				print("I should handle when someone quits :(")
+				continue
+			else:
+				continue
 
 #connectionThread takes care of new connections, and adds new users to the users list (maybe DONE)
 class connectionThread (threading.Thread):
@@ -66,14 +71,7 @@ class processThread (threading.Thread):
 		threading.Thread.__init__(self)
 	def run(self):
 		print("Processing thread initialized.")
-	
-#listenThread is listening for messages from all users
-class listenThread (threading.Thread): 
-	def __init__(self):
-		threading.Thread.__init__(self)
-	def run(self):
-		print("Listening thread initialized.")
-		global running
+
 					
 #commandThread is processing the server terminal commands (Done for now, new functions coming)
 class commandThread (threading.Thread):
@@ -95,8 +93,6 @@ command = ""
 message = ""
 #
 #Have to do:
-#Listen to new connections, and manage users -> connectionThread
-#Get username
 #Lisiten to new messages -> listenThread
 #Send new messages to everyone but sender -> processThread
 #change username -> processThread
