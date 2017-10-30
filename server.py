@@ -13,6 +13,12 @@ def makeConnection():
 	serversocket.listen(5)
 	print("Listener initialized")
 
+class chatUser():
+	def __init__(self, name, address, socket):
+		self.name = name
+		self.address = address
+		self.socket = socket
+	
 class connectionThread (threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
@@ -44,6 +50,10 @@ class listenThread (threading.Thread):
 		threading.Thread.__init__(self)
 	def run(self):
 		print("Listening thread initialized.")
+		global running
+		while running:
+			
+		
 
 class commandThread (threading.Thread):
 	def __init__(self):
@@ -55,18 +65,8 @@ class commandThread (threading.Thread):
 		while running:
 			data = input("")
 			time.sleep(1)
-			if (data == "!users"):
-				listUsers()
-				data = ""
-				continue
-			else:
-				data = ""
 		
-def listUsers():
-	for x in usernames:
-		print(x)
-usernames = []
-addresses = []
+users = []
 users = 0
 running = True
 data = ""
