@@ -38,8 +38,7 @@ class singleListen(threading.Thread):
 		print("SingleListen for %s is set up" % self.name)
 		while running:
 			msg = clientsocket.recv(1024)
-			message = str(msg.decode('ascii'))
-			if (message == "!quit"):
+			if (str(msg.decode('ascii')) == "!quit"):
 				#Some more handling
 				msg = "***Goodbye, dear user! :')***"
 				clientsocket.send(msg.encode('ascii'))
@@ -48,6 +47,7 @@ class singleListen(threading.Thread):
 				print("%s has quit, his message listener set to null" % self.name)
 				continue
 			else:
+				message = str(msg.decode('ascii'))
 				continue
 
 #connectionThread takes care of new connections, and adds new users to the users list (maybe DONE)
@@ -75,7 +75,7 @@ class connectionThread (threading.Thread):
 			listens.append(singleListen(user.id, user.name, user.address, user.socket))
 			listens[(nextID-1)].start()
 			
-#processThread says goodbye to a user, manages quits, and transmits messages to other users
+#processThread transmits messages to other users
 class processThread (threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
