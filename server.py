@@ -14,7 +14,8 @@ def makeConnection():
 	print("Listener initialized")
 
 class chatUser():
-	def __init__(self, name, address, socket):
+	def __init__(self, id, name, address, socket):
+		self.id = id
 		self.name = name
 		self.address = address
 		self.socket = socket
@@ -22,21 +23,25 @@ class chatUser():
 		self.name = newName
 	
 class singleListen(threading.Thread):
-	def __init__(self, name, address, socket):
+	def __init__(self, id, name, address, socket):
 		threading.Thread.__init__(self)
+		self.id = id
 		self.name = name
 		self.address = address
 		self.socket = socket
 	def run(self):
-		print("SingleListen for %s is set up" % self.name)
 		global running
 		global message
+		global userNum
 		clientsocket = self.socket
+		print("SingleListen for %s is set up" % self.name)
 		while running:
 			msg = clientsocket.recv(1024)
 			message = str(msg.decode('ascii'))
 			if (message == "!quit"):
-				print("I should handle when someone quits :(")
+				print("I should handle when someone quits :(") #TODO
+				userNum = userNum-1
+				
 				continue
 			else:
 				continue
@@ -52,7 +57,7 @@ class connectionThread (threading.Thread):
 		global running
 		while running:
 			clientsocket,addr = serversocket.accept()
-			user = chatUser("",str(addr[0]),clientsocket)
+			user = chatUser(userNum, "", str(addr[0]),clientsocket)
 			userNum = userNum+1
 			print("Got a connection from %s, total users: %d" % ( user.address, userNum))
 			msg = "***Welcome to the server! Your next message will be your username.***"
@@ -62,7 +67,7 @@ class connectionThread (threading.Thread):
 			user.setName(newName)
 			print("%s is now known as %s" % (user.address, user.name))
 			users.append(user)
-			listens.append(singleListen(user.name, user.address, user.socket))
+			listens.append(singleListen(user.id, user.name, user.address, user.socket))
 			listens[(userNum-1)].start()
 			
 #processThread says goodbye to a user, manages quits, and transmits messages to other users
