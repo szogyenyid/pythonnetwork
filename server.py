@@ -55,7 +55,7 @@ class singleListen(threading.Thread):
 				listens[self.id] = ""
 				break
 			else:
-				message = ("%s: %s" % (self.name.upper(), str(msg.decode('ascii'))))
+				message = ("%s: %s" % (self.name, str(msg.decode('ascii'))))
 				for x in users:
 					if(message == ""):
 						break
