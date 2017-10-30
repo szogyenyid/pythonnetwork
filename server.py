@@ -18,7 +18,7 @@ class chatUser():
 		self.name = name
 		self.address = address
 		self.socket = socket
-	def setName(newName):
+	def setName(self, newName):
 		self.name = newName
 	
 class connectionThread (threading.Thread):
