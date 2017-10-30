@@ -24,7 +24,7 @@ class processThread (threading.Thread):
 				continue
 			if (data.lower() == "!quit"):
 				serversocket.send(data.lower().encode('ascii'))
-				data = ''
+				data = ""
 				print("Thanks for using me!")
 				running = False
 				break
