@@ -38,7 +38,7 @@ class singleListen(threading.Thread):
 		print("SingleListen for %s is set up" % self.address)
 		msg = clientsocket.recv(1024)
 		newName = str(msg.decode('ascii'))
-		self.Name = newName
+		self.name = newName
 		for x in users:
 			if (self.id == x.id):
 				x.setName(newName)
@@ -55,7 +55,7 @@ class singleListen(threading.Thread):
 				listens[self.id] = ""
 				break
 			else:
-				message = ("%s: %s" % (self.name, str(msg.decode('ascii'))))
+				message = ("%s: %s" % (self.name.upper(), str(msg.decode('ascii'))))
 				for x in users:
 					if(message == ""):
 						break
