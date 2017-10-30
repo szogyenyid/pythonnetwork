@@ -40,6 +40,7 @@ class connectionThread (threading.Thread):
 			msg = clientsocket.recv(1024)
 			user.setName((msg.decode('ascii')))
 			print("%s is now known as %s" % (user.address, user.name))
+			users.append(user)
 			
 class processThread (threading.Thread):
 	def __init__(self):
