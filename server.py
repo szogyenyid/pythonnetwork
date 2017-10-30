@@ -55,10 +55,12 @@ class connectionThread (threading.Thread):
 		global users
 		global userNum
 		global running
+		global nextID
 		while running:
 			clientsocket,addr = serversocket.accept()
-			user = chatUser(userNum, "", str(addr[0]),clientsocket)
-			userNum = userNum+1
+			user = chatUser(nextID, "", str(addr[0]),clientsocket)
+			nextID = nextID+1
+			ne
 			print("Got a connection from %s, total users: %d" % ( user.address, userNum))
 			msg = "***Welcome to the server! Your next message will be your username.***"
 			clientsocket.send(msg.encode('ascii'))
@@ -68,7 +70,7 @@ class connectionThread (threading.Thread):
 			print("%s is now known as %s" % (user.address, user.name))
 			users.append(user)
 			listens.append(singleListen(user.id, user.name, user.address, user.socket))
-			listens[(userNum-1)].start()
+			listens[(nextID-1)].start()
 			
 #processThread says goodbye to a user, manages quits, and transmits messages to other users
 class processThread (threading.Thread):
@@ -92,6 +94,7 @@ class commandThread (threading.Thread):
 		
 listens = []
 users = []
+nextID = 0
 userNum = 0
 running = True
 command = ""
@@ -102,7 +105,7 @@ message = ""
 #Send new messages to everyone but sender -> processThread
 #change username -> processThread
 #when msg is "!quit" send back a goodbye message
-#
+#quit = empty element of array, do not delete it
 #doing stuff
 makeConnection()
 
