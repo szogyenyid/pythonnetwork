@@ -22,7 +22,8 @@ class processThread (threading.Thread):
 			if (data == ''):
 				time.sleep(0.5)
 				continue
-			if (data.lower() == "quit"):
+			if (data.lower() == "!quit"):
+				serversocket.send(data.lower().encode('ascii'))
 				data = ''
 				print("Thanks for using me!")
 				running = False
@@ -71,4 +72,4 @@ thread2.join()
 thread3.join()
 #doing stuff ends
 closeConnection()
-dummy = input("Quit")
+dummy = input("Exit with enter")
