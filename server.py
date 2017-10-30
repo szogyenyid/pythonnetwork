@@ -38,7 +38,8 @@ class connectionThread (threading.Thread):
 			msg = "***Welcome to the server! Your next message will be your username.***"
 			clientsocket.send(msg.encode('ascii'))
 			msg = clientsocket.recv(1024)
-			user.setName((msg.decode('ascii')))
+			newName = str(msg.decode('ascii'))
+			user.setName(newName)
 			print("%s is now known as %s" % (user.address, user.name))
 			users.append(user)
 			
