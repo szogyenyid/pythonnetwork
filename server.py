@@ -21,7 +21,7 @@ class chatUser():
 	def setName(self, newName):
 		self.name = newName
 	
-#connectionThread takes care of new connections, and adds new users to the users list
+#connectionThread takes care of new connections, and adds new users to the users list (maybe DONE)
 class connectionThread (threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
@@ -59,22 +59,22 @@ class listenThread (threading.Thread):
 		global running
 			
 		
-#commandThread is processing the server terminal commands
+#commandThread is processing the server terminal commands (Done for now, new functions coming)
 class commandThread (threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
 	def run(self):
 		print("Command thread initialized.")
-		global data
+		global command
 		global running
 		while running:
-			data = input("")
+			command = input("")
 			time.sleep(1)
 		
 users = []
 userNum = 0
 running = True
-data = ""
+command = ""
 #
 #Have to do:
 #Listen to new connections, and manage users -> connectionThread
