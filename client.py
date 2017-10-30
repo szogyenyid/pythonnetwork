@@ -38,7 +38,7 @@ class listenThread (threading.Thread):
 		global runnging
 		while running:
 			msg = serversocket.recv(1024)
-			if (len(msg.decode('ascii')) > 2):
+			if (len(msg.decode('ascii')) > 0):
 				print (msg.decode('ascii'))
 				msg = ""
 			
