@@ -26,9 +26,8 @@ class connectionThread (threading.Thread):
 		threading.Thread.__init__(self)
 	def run(self):
 		print("Connections thread initialized.")
-		global usernames
-		global addresses
 		global users
+		global userNum
 		global running
 		while running:
 			clientsocket,addr = serversocket.accept()
