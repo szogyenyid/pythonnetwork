@@ -33,8 +33,8 @@ class connectionThread (threading.Thread):
 		while running:
 			clientsocket,addr = serversocket.accept()
 			user = chatUser("",str(addr[0]),clientsocket)
-			users = users+1
-			print("Got a connection from %s, total users: %d" % ( user.address, users))
+			userNum = userNum+1
+			print("Got a connection from %s, total users: %d" % ( user.address, userNum))
 			msg = "***Welcome to the server! Your next message will be your username.***"
 			clientsocket.send(msg.encode('ascii'))
 			msg = clientsocket.recv(1024)
@@ -70,7 +70,7 @@ class commandThread (threading.Thread):
 			time.sleep(1)
 		
 users = []
-users = 0
+userNum = 0
 running = True
 data = ""
 #
