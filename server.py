@@ -18,6 +18,8 @@ class chatUser():
 		self.name = name
 		self.address = address
 		self.socket = socket
+	def setName(newName):
+		self.name = newName
 	
 class connectionThread (threading.Thread):
 	def __init__(self):
@@ -30,14 +32,14 @@ class connectionThread (threading.Thread):
 		global running
 		while running:
 			clientsocket,addr = serversocket.accept()
-			addresses.append(addr[0])
+			user = chatUser("",str(addr[0]),clientsocket)
 			users = users+1
-			print("Got a connection from %s, total users: %d" % ( str(addr[0]), users))
+			print("Got a connection from %s, total users: %d" % ( user.address, users))
 			msg = "***Welcome to the server! Your next message will be your username.***"
 			clientsocket.send(msg.encode('ascii'))
 			msg = clientsocket.recv(1024)
-			usernames.append(msg.decode('ascii'))
-			print("%s is now known as %s" % (str(addr[0]), usernames[(users-1)]))
+			user.setName((msg.decode('ascii')))
+			print("%s is now known as %s" % (user.address, user.name))
 			
 class processThread (threading.Thread):
 	def __init__(self):
@@ -51,7 +53,6 @@ class listenThread (threading.Thread):
 	def run(self):
 		print("Listening thread initialized.")
 		global running
-		while running:
 			
 		
 
