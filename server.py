@@ -51,11 +51,11 @@ class singleListen(threading.Thread):
 				msg = "***Goodbye, dear user! :')***"
 				clientsocket.send(msg.encode('ascii'))
 				userNum = userNum-1
-				listens[self.id] = ""
 				print("%s has quit, his message listener set to null" % self.name)
-				continue
+				listens[self.id] = ""
+				break
 			else:
-				message = ("%s: %s" % (self.name.toupper(), str(msg.decode('ascii'))))
+				message = ("%s: %s" % (self.name.upper(), str(msg.decode('ascii'))))
 				continue
 
 #connectionThread takes care of new connections, and adds new users to the users list (maybe DONE)
