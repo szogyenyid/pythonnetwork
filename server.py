@@ -1,5 +1,6 @@
 import socket
 import threading
+import time
 
 def makeConnection():
 	global serversocket
@@ -49,11 +50,26 @@ class commandThread (threading.Thread):
 		threading.Thread.__init__(self)
 	def run(self):
 		print("Command thread initialized.")
+		global data
+		global running
+		while running:
+			data = input("")
+			time.sleep(1)
+			if (data == "!users"):
+				listUsers()
+				data = ""
+				continue
+			else:
+				data = ""
 		
+def listUsers():
+	for x in usernames:
+		print(x)
 usernames = []
 addresses = []
 users = 0
-running = True	
+running = True
+data = ""
 #
 #Have to do:
 #Listen to new connections, and manage users -> connectionThread
