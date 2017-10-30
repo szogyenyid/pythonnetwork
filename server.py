@@ -90,6 +90,17 @@ class commandThread (threading.Thread):
 		while running:
 			command = input("")
 			time.sleep(1)
+			if (command == "!users"):
+				listOfUsers()
+				continue
+			else:
+				continue
+		
+def listOfUsers():
+	print("ID | Name | Address")
+	for x in users:
+		print(x.id, x.name, x.address)
+		
 		
 listens = []
 users = []
@@ -105,6 +116,7 @@ message = ""
 #change username -> processThread
 #when msg is "!quit" send back a goodbye message
 #quit = empty element of array, do not delete it
+#maximum number of users
 #doing stuff
 makeConnection()
 
