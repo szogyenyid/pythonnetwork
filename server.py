@@ -41,10 +41,11 @@ class singleListen(threading.Thread):
 			message = str(msg.decode('ascii'))
 			if (message == "!quit"):
 				#Some more handling
-				msg = "Goodbye, dear user! :')"
+				msg = "***Goodbye, dear user! :')***"
 				clientsocket.send(msg.encode('ascii'))
 				userNum = userNum-1
 				listens[self.id] = ""
+				print("%s has quit, his message listener set to null" % self.name)
 				continue
 			else:
 				continue
