@@ -60,7 +60,6 @@ class connectionThread (threading.Thread):
 			clientsocket,addr = serversocket.accept()
 			user = chatUser(nextID, "", str(addr[0]),clientsocket)
 			nextID = nextID+1
-			ne
 			print("Got a connection from %s, total users: %d" % ( user.address, userNum))
 			msg = "***Welcome to the server! Your next message will be your username.***"
 			clientsocket.send(msg.encode('ascii'))
