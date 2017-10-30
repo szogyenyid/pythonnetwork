@@ -5,10 +5,10 @@ def makeConnection():
 	global serversocket
 	serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	print("Socket created")
-	#host = input("Please enter your ip address: ")
+	host = input("Please enter your ip address: ")
 	port = int(input("The port you would like to use: "))
-	serversocket.bind(('localhost', port))
-	print("Socket bound to %s" % str(('localhost',port)))
+	serversocket.bind((host, port))
+	print("Socket bound to %s" % str((host,port)))
 	serversocket.listen(5)
 	print("Listener initialized")
 
@@ -30,7 +30,8 @@ class listenThread (threading.Thread):
 	def run(self):
 		print("Listening thread initialized.")
 
-
+usernames = []
+addresses = []
 	
 
 makeConnection()
