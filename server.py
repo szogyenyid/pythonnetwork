@@ -33,15 +33,18 @@ class singleListen(threading.Thread):
 		global running
 		global message
 		global userNum
+		global listens
 		clientsocket = self.socket
 		print("SingleListen for %s is set up" % self.name)
 		while running:
 			msg = clientsocket.recv(1024)
 			message = str(msg.decode('ascii'))
 			if (message == "!quit"):
-				print("I should handle when someone quits :(") #TODO
+				#Some more handling
+				msg = "Goodbye, dear user! :')"
+				clientsocket.send(msg.encode('ascii'))
 				userNum = userNum-1
-				
+				listens[self.id] = ""
 				continue
 			else:
 				continue
@@ -117,6 +120,7 @@ message = ""
 #when msg is "!quit" send back a goodbye message
 #quit = empty element of array, do not delete it
 #maximum number of users
+
 #doing stuff
 makeConnection()
 
