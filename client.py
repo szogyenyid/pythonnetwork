@@ -19,7 +19,7 @@ class processThread (threading.Thread):
 		global data
 		global running
 		while running:
-			if (data == ''):
+			if (data == ""):
 				time.sleep(0.5)
 				continue
 			if (data.lower() == "!quit"):
@@ -30,7 +30,7 @@ class processThread (threading.Thread):
 				break
 			else:
 				serversocket.send(data.encode('ascii'))
-				data = ''
+				data = ""
 				
 class listenThread (threading.Thread):
 	def __init__(self):
@@ -59,17 +59,17 @@ def closeConnection():
 	
 makeConnection()
 #doing stuff
-data = ''
+data = ""
 running = True
-thread1 = processThread()
-thread2 = listenThread()
-thread3 = commandThread()
-thread1.start()
-thread2.start()
-thread3.start()
-thread1.join()
-thread2.join()
-thread3.join()
+processTh = processThread()
+listenTh = listenThread()
+commandTh = commandThread()
+processTh.start()
+listenTh.start()
+commandTh.start()
+processTh.join()
+listenTh.join()
+commandTh.join()
 #doing stuff ends
 closeConnection()
 dummy = input("Exit with enter")
