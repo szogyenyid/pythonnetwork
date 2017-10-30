@@ -17,7 +17,21 @@ class connectionThread (threading.Thread):
 		threading.Thread.__init__(self)
 	def run(self):
 		print("Connections thread initialized.")
-	
+		global usernames
+		global addresses
+		global users
+		global running
+		while running:
+			clientsocket,addr = serversocket.accept()
+			addresses.append(addr[0])
+			users = users+1
+			print("Got a connection from %s, total users: %d" % ( str(addr[0]), users))
+			msg = "***Welcome to the server! Your next message will be your username.***"
+			clientsocket.send(msg.encode('ascii'))
+			msg = clientsocket.recv(1024)
+			usernames.append(msg.decode('ascii'))
+			print("%s is now known as %s" % (str(addr[0]), usernames[(users-1)]))
+			
 class processThread (threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
@@ -32,7 +46,7 @@ class listenThread (threading.Thread):
 
 usernames = []
 addresses = []
-	
+users = 0	
 
 makeConnection()
 #doing stuff
@@ -44,14 +58,11 @@ makeConnection()
 #change username -> processThread
 #
 running = True
-while running:
-	clientsocket,addr = serversocket.accept()      
-	print("Got a connection from %s" % str(addr[0]))
-	msg = 'SERVER: Thank you for connecting'+ "\r\n"
-	clientsocket.send(msg.encode('ascii'))
-	while True:
-		msg = clientsocket.recv(1024)
-		clientsocket.send(msg)
-		msg = ''
+conThread = connectionThread()
+conThread.start()
+#while running:
+#		msg = clientsocket.recv(1024)
+#		clientsocket.send(msg)
+#		msg = ''
 #doing stuff ends here
-dummy = input("Quit")
+#dummy = input("Exit with enter")
