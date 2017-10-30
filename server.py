@@ -44,12 +44,17 @@ class listenThread (threading.Thread):
 	def run(self):
 		print("Listening thread initialized.")
 
+class commandThread (threading.Thread):
+	def __init__(self):
+		threading.Thread.__init__(self)
+	def run(self):
+		print("Command thread initialized.")
+		
 usernames = []
 addresses = []
-users = 0	
-
-makeConnection()
-#doing stuff
+users = 0
+running = True	
+#
 #Have to do:
 #Listen to new connections, and manage users -> connectionThread
 #Get username
@@ -57,12 +62,12 @@ makeConnection()
 #Send new messages to everyone but sender -> processThread
 #change username -> processThread
 #
-running = True
+#doing stuff
+makeConnection()
+
+comThread = commandThread()
+comThread.start()
 conThread = connectionThread()
 conThread.start()
-#while running:
-#		msg = clientsocket.recv(1024)
-#		clientsocket.send(msg)
-#		msg = ''
 #doing stuff ends here
 #dummy = input("Exit with enter")
