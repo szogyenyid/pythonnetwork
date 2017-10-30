@@ -2,6 +2,7 @@ import socket
 import threading
 import time
 
+#setting up a TCP server
 def makeConnection():
 	global serversocket
 	serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -13,6 +14,7 @@ def makeConnection():
 	serversocket.listen(5)
 	print("Listener initialized")
 
+#class for storing users, and their data
 class chatUser():
 	def __init__(self, id, name, address, socket):
 		self.id = id
@@ -21,7 +23,8 @@ class chatUser():
 		self.socket = socket
 	def setName(self, newName):
 		self.name = newName
-	
+
+#message listener and transmitter for a single user		
 class singleListen(threading.Thread):
 	def __init__(self, id, name, address, socket):
 		threading.Thread.__init__(self)
@@ -48,11 +51,12 @@ class singleListen(threading.Thread):
 			msg = clientsocket.recv(1024)
 			if (str(msg.decode('ascii')) == "!quit"):
 				#Some more handling
-				msg = "***Goodbye, dear user! :')***"
+				msg = "*** Goodbye, dear user! :') ***"
 				clientsocket.send(msg.encode('ascii'))
 				userNum = userNum-1
 				print("%s has quit, his message listener set to null" % x.name)
 				listens[self.id] = ""
+				#self.join MAYBE?
 				break
 			else:
 				message = ("%s: %s" % (self.name.upper(), str(msg.decode('ascii'))))
@@ -66,7 +70,7 @@ class singleListen(threading.Thread):
 				message = ""
 				continue
 
-#connectionThread takes care of new connections, and adds new users to the users list (maybe DONE)
+#connectionThread takes care of new connections, and adds new users to the users list
 class connectionThread (threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
@@ -82,14 +86,13 @@ class connectionThread (threading.Thread):
 			userNum = userNum+1
 			nextID = nextID+1
 			print("Got a connection from %s, total users: %d" % ( user.address, userNum))
-			msg = "***Welcome to the server! Your next message will be your username.***"
+			msg = "*** Welcome to the server! Your next message will be your username. ***"
 			clientsocket.send(msg.encode('ascii'))
 			users.append(user)
 			listens.append(singleListen(user.id, user.name, user.address, user.socket))
 			listens[(nextID-1)].start()
-
 					
-#commandThread is processing the server terminal commands (Done for now, new functions coming)
+#commandThread is processing the server terminal commands
 class commandThread (threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
@@ -104,8 +107,10 @@ class commandThread (threading.Thread):
 				listOfUsers()
 				continue
 			else:
+				print("Unknown command")
 				continue
-		
+
+#prints the list of users				
 def listOfUsers():
 	print("ID | Name | Address")
 	for x in users:
@@ -113,28 +118,33 @@ def listOfUsers():
 	print()
 
 		
-listens = []
-users = []
+listens = [] #array for single listeners
+users = [] #array for users
 nextID = 0
 userNum = 0
 running = True
 command = ""
 message = ""
+
 #
-#Have to do:
-#Lisiten to new messages -> listenThread
-#Send new messages to everyone but sender -> processThread
+#Have ToDo:
 #change username -> processThread
-#when msg is "!quit" send back a goodbye message
-#quit = empty element of array, do not delete it
+#mass messages when someone joins, exits, changes username
+#quit = empty the element of array, do not delete it
 #maximum number of users
+#server reset command
+#server shut down command (with timer)
+#kickuser command
+#registering username
+#ban command
+#close all connections like a good boy
+#
 
-#doing stuff
 makeConnection()
-
 comThread = commandThread()
 comThread.start()
 conThread = connectionThread()
 conThread.start()
-#doing stuff ends here
+
+
 #dummy = input("Exit with enter")
