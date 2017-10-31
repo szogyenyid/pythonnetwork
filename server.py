@@ -56,11 +56,14 @@ class singleListen(threading.Thread):
 				msg = "*** Goodbye, dear user! :') ***"
 				clientsocket.send(msg.encode('ascii'))
 				userNum = userNum-1
-				print("%s has quit, his message listener set to null" % newName)
+				nextID = self.id
+				print("%s has quit, deleted his message listener and user" % newName)
 				leaveNoti = ("%s has quit the server" % newName)
 				sendAll(leaveNoti, True)
-				listens[self.id] = ""
-				#self.join MAYBE?
+				index = getUserIndex(newName)
+				listens[index].socket.close()
+				listens.pop(index)
+				users.pop(index)
 				break
 			else:
 				message = ("%s: %s" % (self.name.upper(), str(msg.decode('ascii'))))
@@ -94,7 +97,7 @@ class connectionThread (threading.Thread):
 			clientsocket.send(msg.encode('ascii'))
 			users.append(user)
 			listens.append(singleListen(user.id, user.name, user.address, user.socket))
-			listens[(nextID-1)].start()
+			listens[(len(listens)-1)].start()
 					
 #commandThread is processing the server terminal commands
 class commandThread (threading.Thread):
@@ -134,7 +137,12 @@ def sendAll(message, n):
 		x.socket.send(msg.encode('ascii'))
 	print("%s  -- sent to all" % msg) 
 	msg = ""
-		
+def getUserIndex(name):
+	global users
+	for x in users:
+		if(x.name == name):
+			return users.index(x)
+				
 listens = [] #array for single listeners
 users = [] #array for users
 nextID = 0
