@@ -101,10 +101,15 @@ class commandThread (threading.Thread):
 		global command
 		global running
 		while running:
-			command = input("")
 			time.sleep(1)
+			command = input("")
 			if (command == "!users"):
 				listOfUsers()
+				continue
+			if (command == "!sendall"):
+				msg = input("Send to all users: ")
+				noti = input("Notification? ")
+				sendAll(msg, noti)
 				continue
 			else:
 				print("Unknown command")
@@ -116,7 +121,15 @@ def listOfUsers():
 	for x in users:
 		print(x.id, x.name, x.address)
 	print()
-
+def sendAll(message, n):
+	if(n==1 or n=="y" or n==True or n=="true" or n=="yes"):
+		msg = ("*** %s ***" % message)
+	else:
+		msg = ("SysOp: %s" % message)
+	for x in users:
+		x.socket.send(msg.encode('ascii'))
+	print("%s  -- sent to all" % msg) 
+	msg = ""
 		
 listens = [] #array for single listeners
 users = [] #array for users
