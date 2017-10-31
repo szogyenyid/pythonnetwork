@@ -151,20 +151,6 @@ running = True
 command = ""
 message = ""
 
-#
-#Have ToDo:
-#change username -> processThread
-#mass messages when someone joins, exits, changes username
-#quit = empty the element of array, do not delete it
-#maximum number of users
-#server reset command
-#server shut down command (with timer)
-#kickuser command
-#registering username
-#ban command
-#close all connections like a good boy
-#
-
 makeConnection()
 comThread = commandThread()
 comThread.start()
