@@ -47,6 +47,8 @@ class singleListen(threading.Thread):
 				x.setName(newName)
 				continue
 		print("%s is now known as %s" % (self.address, newName))
+		joinNoti = ("%s connected to the server" %newName)
+		sendAll(joinNoti, True)
 		while running:
 			msg = clientsocket.recv(1024)
 			if (str(msg.decode('ascii')) == "!quit"):
@@ -54,7 +56,9 @@ class singleListen(threading.Thread):
 				msg = "*** Goodbye, dear user! :') ***"
 				clientsocket.send(msg.encode('ascii'))
 				userNum = userNum-1
-				print("%s has quit, his message listener set to null" % x.name)
+				print("%s has quit, his message listener set to null" % newName)
+				leaveNoti = ("%s has quit the server" % newName)
+				sendAll(leaveNoti, True)
 				listens[self.id] = ""
 				#self.join MAYBE?
 				break
@@ -123,7 +127,7 @@ def listOfUsers():
 	print()
 def sendAll(message, n):
 	if(n==1 or n=="y" or n==True or n=="true" or n=="yes"):
-		msg = ("*** %s ***" % message)
+		msg = ("* %s *" % message)
 	else:
 		msg = ("SysOp: %s" % message)
 	for x in users:
