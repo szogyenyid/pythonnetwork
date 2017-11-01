@@ -1,9 +1,8 @@
 Client:
 
 Server:
-	+ merge chatUser class with singlelistener
+	+ method for handling user commands
 	+ username change
-	+ mass message on username change
 	+ maximum number of users
 	+ reset command
 	+ shut down command
