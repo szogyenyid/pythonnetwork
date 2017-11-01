@@ -56,7 +56,7 @@ def makeConnection():
 	host = input("Please enter the IP you would like to connect to: ")
 	port = int(input("The port you would like to use: "))
 	serversocket.connect((host,port))
-	print("Connected to %s" % str((host,port)))
+	print("Connected to %s \n" % str((host,port)))
 def closeConnection():
 	serversocket.close()
 	
