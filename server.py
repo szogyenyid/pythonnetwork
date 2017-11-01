@@ -27,8 +27,9 @@ class chatUser(threading.Thread):
 		else:
 			justConnected = False
 			oldName = self.name
-		clientsocket = self.socket
-		msg = clientsocket.recv(1024)
+			msg = "Please enter your new name:"
+			self.socket.send(msg.encode('ascii'))
+		msg = self.socket.recv(1024)
 		newName = str(msg.decode('ascii'))
 		self.name = newName
 		print("%s is now known as %s\n" % (self.address, newName))
@@ -52,6 +53,8 @@ class chatUser(threading.Thread):
 	def handleCommand(self, command):
 		if (command == "!quit"):
 			self.quit()
+		if (command == "!name"):
+			self.changeName()
 	def handleMessage(self, msg):
 		global usercommands
 		global message
@@ -141,7 +144,7 @@ def getUserIndex(name):
 			return users.index(x)
 				
 users = [] #array for single listeners
-usercommands = ["!quit"]
+usercommands = ["!quit", "!name"]
 nextID = 0
 userNum = 0
 running = True
