@@ -37,12 +37,11 @@ class singleListen(threading.Thread):
 			joinNoti = ("%s is now known as %s" % (oldName, newName))
 		sendAll(joinNoti, True)
 	
-	
 	def run(self):
 		global running
 		global message
 		global userNum
-		global listens
+		global users
 		clientsocket = self.socket
 		print("SingleListen for %s is set up" % self.address)
 		self.changeName()
@@ -57,12 +56,12 @@ class singleListen(threading.Thread):
 				leaveNoti = ("%s has quit the server" % newName)
 				sendAll(leaveNoti, True)
 				index = getUserIndex(newName)
-				listens[index].socket.close()
-				listens.pop(index)
+				users[index].socket.close()
+				users.pop(index)
 				break
 			else:
 				message = ("%s: %s" % (self.name.upper(), str(msg.decode('ascii'))))
-				for x in listens:
+				for x in users:
 					if(message == ""):
 						break
 					if(x.id == self.id):
@@ -89,8 +88,8 @@ class connectionThread (threading.Thread):
 			print("Got a connection from %s, total users: %d" % ( user.address, userNum))
 			msg = "*** Welcome to the server! Please enter your name: ***"
 			clientsocket.send(msg.encode('ascii'))
-			listens.append(user)
-			listens[(len(listens)-1)].start()
+			users.append(user)
+			users[(len(users)-1)].start()
 			
 					
 #commandThread is processing the server terminal commands
@@ -119,7 +118,7 @@ class commandThread (threading.Thread):
 #prints the list of users				
 def listOfUsers():
 	print("ID | Name | Address")
-	for x in listens:
+	for x in users:
 		print(x.id, x.name, x.address)
 	print()
 def sendAll(message, n):
@@ -127,16 +126,16 @@ def sendAll(message, n):
 		msg = ("* %s *" % message)
 	else:
 		msg = ("SysOp: %s" % message)
-	for x in listens:
+	for x in users:
 		x.socket.send(msg.encode('ascii'))
 	print("%s  -- sent to all" % msg) 
 	msg = ""
 def getUserIndex(name):
-	for x in listens:
+	for x in users:
 		if(x.name == name):
-			return listens.index(x)
+			return users.index(x)
 				
-listens = [] #array for single listeners
+users = [] #array for single listeners
 nextID = 0
 userNum = 0
 running = True
