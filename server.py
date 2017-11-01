@@ -42,20 +42,19 @@ class singleListen(threading.Thread):
 		global message
 		global userNum
 		global users
-		clientsocket = self.socket
 		print("SingleListen for %s is set up" % self.address)
 		self.changeName()
 		while running:
-			msg = clientsocket.recv(1024)
+			msg = self.socket.recv(1024)
 			if (str(msg.decode('ascii')) == "!quit"):
 				msg = "*** Goodbye, dear user! :') ***"
-				clientsocket.send(msg.encode('ascii'))
+				self.socket.send(msg.encode('ascii'))
 				userNum = userNum-1
 				nextID = self.id
-				print("%s has quit, deleted his message listener and user" % newName)
-				leaveNoti = ("%s has quit the server" % newName)
+				print("%s has quit, deleted his message listener and user" % self.name)
+				leaveNoti = ("%s has quit the server" % self.name)
 				sendAll(leaveNoti, True)
-				index = getUserIndex(newName)
+				index = getUserIndex(self.name)
 				users[index].socket.close()
 				users.pop(index)
 				break
@@ -136,6 +135,7 @@ def getUserIndex(name):
 			return users.index(x)
 				
 users = [] #array for single listeners
+usercommands = ["!quit", "!exit"]
 nextID = 0
 userNum = 0
 running = True
