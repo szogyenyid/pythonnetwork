@@ -20,6 +20,24 @@ class singleListen(threading.Thread):
 		self.name = name
 		self.address = address
 		self.socket = socket
+	def changeName(self):
+		if(self.name == ""):
+			justConnected = True
+		else:
+			justConnected = False
+			oldName = self.name
+		clientsocket = self.socket
+		msg = clientsocket.recv(1024)
+		newName = str(msg.decode('ascii'))
+		self.name = newName
+		print("%s is now known as %s" % (self.address, newName))
+		if(justConnected):
+			joinNoti = ("%s connected to the server" %newName)
+		else:
+			joinNoti = ("%s is now known as %s" % (oldName, newName))
+		sendAll(joinNoti, True)
+	
+	
 	def run(self):
 		global running
 		global message
@@ -27,21 +45,10 @@ class singleListen(threading.Thread):
 		global listens
 		clientsocket = self.socket
 		print("SingleListen for %s is set up" % self.address)
-		#getName
-		msg = clientsocket.recv(1024)
-		newName = str(msg.decode('ascii'))
-		self.name = newName
-		for x in listens:
-			if (self.id == x.id):
-				x.setName(newName)
-				continue
-		print("%s is now known as %s" % (self.address, newName))
-		joinNoti = ("%s connected to the server" %newName)
-		sendAll(joinNoti, True)
+		self.changeName()
 		while running:
 			msg = clientsocket.recv(1024)
 			if (str(msg.decode('ascii')) == "!quit"):
-				#Some more handling
 				msg = "*** Goodbye, dear user! :') ***"
 				clientsocket.send(msg.encode('ascii'))
 				userNum = userNum-1
