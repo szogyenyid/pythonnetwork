@@ -42,7 +42,7 @@ class singleListen(threading.Thread):
 		msg = clientsocket.recv(1024)
 		newName = str(msg.decode('ascii'))
 		self.name = newName
-		for x in users:
+		for x in listens:
 			if (self.id == x.id):
 				x.setName(newName)
 				continue
@@ -63,11 +63,10 @@ class singleListen(threading.Thread):
 				index = getUserIndex(newName)
 				listens[index].socket.close()
 				listens.pop(index)
-				users.pop(index)
 				break
 			else:
 				message = ("%s: %s" % (self.name.upper(), str(msg.decode('ascii'))))
-				for x in users:
+				for x in listens:
 					if(message == ""):
 						break
 					if(x.id == self.id):
@@ -83,7 +82,6 @@ class connectionThread (threading.Thread):
 		threading.Thread.__init__(self)
 	def run(self):
 		print("Connections thread initialized.")
-		global users
 		global userNum
 		global running
 		global nextID
@@ -95,7 +93,6 @@ class connectionThread (threading.Thread):
 			print("Got a connection from %s, total users: %d" % ( user.address, userNum))
 			msg = "*** Welcome to the server! Your next message will be your username. ***"
 			clientsocket.send(msg.encode('ascii'))
-			users.append(user)
 			listens.append(singleListen(user.id, user.name, user.address, user.socket))
 			listens[(len(listens)-1)].start()
 					
@@ -125,26 +122,24 @@ class commandThread (threading.Thread):
 #prints the list of users				
 def listOfUsers():
 	print("ID | Name | Address")
-	for x in users:
+	for x in listens:
 		print(x.id, x.name, x.address)
 	print()
 def sendAll(message, n):
-	if(n==1 or n=="y" or n==True or n=="true" or n=="yes"):
+	if(n=="1" or n=="y" or n==True or n=="true" or n=="yes"):
 		msg = ("* %s *" % message)
 	else:
 		msg = ("SysOp: %s" % message)
-	for x in users:
+	for x in listens:
 		x.socket.send(msg.encode('ascii'))
 	print("%s  -- sent to all" % msg) 
 	msg = ""
 def getUserIndex(name):
-	global users
-	for x in users:
+	for x in listens:
 		if(x.name == name):
-			return users.index(x)
+			return listens.index(x)
 				
 listens = [] #array for single listeners
-users = [] #array for users
 nextID = 0
 userNum = 0
 running = True
