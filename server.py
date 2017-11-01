@@ -13,7 +13,7 @@ def makeConnection():
 	print("Server started on %s \n" % str((host,port)))
 
 #message listener and transmitter for a single user		
-class singleListen(threading.Thread):
+class chatUser(threading.Thread):
 	def __init__(self, id, name, address, socket):
 		threading.Thread.__init__(self)
 		self.id = id
@@ -31,7 +31,7 @@ class singleListen(threading.Thread):
 		msg = clientsocket.recv(1024)
 		newName = str(msg.decode('ascii'))
 		self.name = newName
-		print("%s is now known as %s" % (self.address, newName))
+		print("%s is now known as %s\n" % (self.address, newName))
 		if(justConnected):
 			joinNoti = ("%s connected to the server" %newName)
 		else:
@@ -70,7 +70,7 @@ class singleListen(threading.Thread):
 		global message
 		global userNum
 		global users
-		print("SingleListen for %s is set up" % self.address)
+		print("Single listener for %s is set up" % self.address)
 		self.changeName()
 		while (running and self.runs):
 			gotMsg = self.socket.recv(1024)
@@ -82,13 +82,13 @@ class connectionThread (threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
 	def run(self):
-		print("Connections thread initialized.")
+		print("Connections thread initialized.\n")
 		global userNum
 		global running
 		global nextID
 		while running:			
 			clientsocket,addr = serversocket.accept()
-			user = singleListen(nextID, "", str(addr[0]), clientsocket)
+			user = chatUser(nextID, "", str(addr[0]), clientsocket)
 			userNum += 1
 			nextID += 1
 			print("Got a connection from %s, total users: %d" % ( user.address, userNum))
@@ -96,8 +96,7 @@ class connectionThread (threading.Thread):
 			clientsocket.send(msg.encode('ascii'))
 			users.append(user)
 			users[(len(users)-1)].start()
-			
-					
+						
 #commandThread is processing the server terminal commands
 class commandThread (threading.Thread):
 	def __init__(self):
