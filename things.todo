@@ -3,7 +3,6 @@ Client:
 Server:
 	+ handle possible exceptions (ConnectionResetError)
 	+ method for handling server commands
-	+ username change
 	+ maximum number of users
 	+ reset command
 	+ shut down command
