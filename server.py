@@ -6,11 +6,11 @@ import time
 def makeConnection():
 	global serversocket
 	serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	host = input("Please enter your ip address: ")
+	host = input("Please enter your IP address: ")
 	port = int(input("The port you would like to use: "))
 	serversocket.bind((host, port))
 	serversocket.listen(5)
-	print("Server started on %s" % str((host,port)))
+	print("Server started on %s \n" % str((host,port)))
 
 #message listener and transmitter for a single user		
 class singleListen(threading.Thread):
@@ -27,6 +27,7 @@ class singleListen(threading.Thread):
 		global listens
 		clientsocket = self.socket
 		print("SingleListen for %s is set up" % self.address)
+		#getName
 		msg = clientsocket.recv(1024)
 		newName = str(msg.decode('ascii'))
 		self.name = newName
@@ -140,6 +141,5 @@ comThread = commandThread()
 comThread.start()
 conThread = connectionThread()
 conThread.start()
-
 
 #dummy = input("Exit with enter")
