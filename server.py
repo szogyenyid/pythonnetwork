@@ -6,13 +6,11 @@ import time
 def makeConnection():
 	global serversocket
 	serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	print("Socket created")
 	host = input("Please enter your ip address: ")
 	port = int(input("The port you would like to use: "))
 	serversocket.bind((host, port))
-	print("Socket bound to %s" % str((host,port)))
 	serversocket.listen(5)
-	print("Listener initialized")
+	print("Server started on %s" % str((host,port)))
 
 #message listener and transmitter for a single user		
 class singleListen(threading.Thread):
