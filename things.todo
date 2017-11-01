@@ -1,7 +1,7 @@
 Client:
 
 Server:
-	+ method for handling user commands
+	+ method for handling server commands
 	+ username change
 	+ maximum number of users
 	+ reset command

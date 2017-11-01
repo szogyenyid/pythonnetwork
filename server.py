@@ -20,6 +20,7 @@ class singleListen(threading.Thread):
 		self.name = name
 		self.address = address
 		self.socket = socket
+		self.runs = True
 	def changeName(self):
 		if(self.name == ""):
 			justConnected = True
@@ -36,6 +37,33 @@ class singleListen(threading.Thread):
 		else:
 			joinNoti = ("%s is now known as %s" % (oldName, newName))
 		sendAll(joinNoti, True)
+	def quit(self):
+		global userNum
+		msg = "*** Goodbye, dear user! :') ***"
+		self.socket.send(msg.encode('ascii'))
+		userNum = userNum-1
+		print("%s has quit, deleted his message listener and user" % self.name)
+		leaveNoti = ("%s has quit the server" % self.name)
+		sendAll(leaveNoti, True)
+		self.socket.close()
+		index = getUserIndex(self.name)
+		users.pop(index)
+		self.runs = False
+	def handleCommand(self, command):
+		if (command == "!quit"):
+			self.quit()
+	def handleMessage(self, msg):
+		global usercommands
+		global message
+		if (msg in usercommands):
+			self.handleCommand(msg)
+		else:
+			message = ("%s: %s" % (self.name.upper(), msg))
+			for x in users:
+				if(x == self):
+					continue
+				else:
+					x.socket.send(message.encode('ascii'))
 	
 	def run(self):
 		global running
@@ -44,31 +72,10 @@ class singleListen(threading.Thread):
 		global users
 		print("SingleListen for %s is set up" % self.address)
 		self.changeName()
-		while running:
-			msg = self.socket.recv(1024)
-			if (str(msg.decode('ascii')) == "!quit"):
-				msg = "*** Goodbye, dear user! :') ***"
-				self.socket.send(msg.encode('ascii'))
-				userNum = userNum-1
-				nextID = self.id
-				print("%s has quit, deleted his message listener and user" % self.name)
-				leaveNoti = ("%s has quit the server" % self.name)
-				sendAll(leaveNoti, True)
-				index = getUserIndex(self.name)
-				users[index].socket.close()
-				users.pop(index)
-				break
-			else:
-				message = ("%s: %s" % (self.name.upper(), str(msg.decode('ascii'))))
-				for x in users:
-					if(message == ""):
-						break
-					if(x.id == self.id):
-						continue
-					else:
-						x.socket.send(message.encode('ascii'))
-				message = ""
-				continue
+		while (running and self.runs):
+			gotMsg = self.socket.recv(1024)
+			msg = str(gotMsg.decode('ascii'))
+			self.handleMessage(msg)
 
 #connectionThread takes care of new connections, and adds new users to the users list
 class connectionThread (threading.Thread):
@@ -135,7 +142,7 @@ def getUserIndex(name):
 			return users.index(x)
 				
 users = [] #array for single listeners
-usercommands = ["!quit", "!exit"]
+usercommands = ["!quit"]
 nextID = 0
 userNum = 0
 running = True
