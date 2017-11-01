@@ -14,16 +14,6 @@ def makeConnection():
 	serversocket.listen(5)
 	print("Listener initialized")
 
-#class for storing users, and their data
-class chatUser():
-	def __init__(self, id, name, address, socket):
-		self.id = id
-		self.name = name
-		self.address = address
-		self.socket = socket
-	def setName(self, newName):
-		self.name = newName
-
 #message listener and transmitter for a single user		
 class singleListen(threading.Thread):
 	def __init__(self, id, name, address, socket):
@@ -85,16 +75,17 @@ class connectionThread (threading.Thread):
 		global userNum
 		global running
 		global nextID
-		while running:
+		while running:			
 			clientsocket,addr = serversocket.accept()
-			user = chatUser(nextID, "", str(addr[0]),clientsocket)
-			userNum = userNum+1
-			nextID = nextID+1
+			user = singleListen(nextID, "", str(addr[0]), clientsocket)
+			userNum += 1
+			nextID += 1
 			print("Got a connection from %s, total users: %d" % ( user.address, userNum))
-			msg = "*** Welcome to the server! Your next message will be your username. ***"
+			msg = "*** Welcome to the server! Please enter your name: ***"
 			clientsocket.send(msg.encode('ascii'))
-			listens.append(singleListen(user.id, user.name, user.address, user.socket))
+			listens.append(user)
 			listens[(len(listens)-1)].start()
+			
 					
 #commandThread is processing the server terminal commands
 class commandThread (threading.Thread):
