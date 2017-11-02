@@ -1,7 +1,6 @@
 Client:
 	+ handle kicking
 Server:
-	+ method for handling server commands
 	+ maximum number of users
 	+ reset command
 	+ shut down command

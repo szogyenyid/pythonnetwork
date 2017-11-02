@@ -48,8 +48,11 @@ class chatUser(threading.Thread):
 		index = getUserIndex(self.name)
 		users.pop(index)
 		self.runs = False
+	def kick(self):
+		msg = "*** You have been kicked from the server! ***"
+		self.socket.send(msg.encode('ascii'))
+		self.kill()
 	def quit(self):
-		global userNum
 		msg = "*** Goodbye, dear user! :') ***"
 		self.socket.send(msg.encode('ascii'))
 		self.kill()
@@ -111,6 +114,17 @@ class connectionThread (threading.Thread):
 class commandThread (threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
+	def handleCommand(self, command):
+		global servercommands
+		if (command in servercommands):
+			if(command == "!users"):
+				listOfUsers()
+			if(command == "!sendall"):
+				msg = input("Send to all users: ")
+				noti = input("Notification? ")
+				sendAll(msg, noti)
+		else:
+			print("Unknown command")
 	def run(self):
 		print("Command thread initialized.")
 		global command
@@ -118,17 +132,7 @@ class commandThread (threading.Thread):
 		while running:
 			time.sleep(1)
 			command = input("")
-			if (command == "!users"):
-				listOfUsers()
-				continue
-			if (command == "!sendall"):
-				msg = input("Send to all users: ")
-				noti = input("Notification? ")
-				sendAll(msg, noti)
-				continue
-			else:
-				print("Unknown command")
-				continue
+			self.handleCommand(command)
 
 #prints the list of users				
 def listOfUsers():
@@ -164,6 +168,7 @@ def getUserIndex(name):
 				
 users = [] #array for single listeners
 usercommands = ["!quit", "!name"]
+servercommands = ["!users", "!sendall"]
 nextID = 0
 userNum = 0
 running = True
