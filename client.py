@@ -9,8 +9,11 @@ class commandThread (threading.Thread):
 		global data
 		global running
 		while running:
-			data = input("")
-			time.sleep(1)
+			try:
+				data = input("")
+				time.sleep(1)
+			except UnicodeEncodeError:
+				print("Please use only Unicode characters!")
 		#print("Command thread terminated")
 
 class processThread (threading.Thread):
@@ -30,8 +33,12 @@ class processThread (threading.Thread):
 				running = False
 				break
 			else:
-				serversocket.send(data.encode('ascii'))
-				data = ""
+				try:
+					serversocket.send(data.encode('ascii'))
+					data = ""
+				except UnicodeEncodeError:
+					print("Please use only Unicode characters!")
+					data = ""
 		#print("Process thread terminated")
 				
 class listenThread (threading.Thread):

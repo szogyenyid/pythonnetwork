@@ -8,6 +8,6 @@ Server:
 	+ don't allow the same name for 2 users
 Exceptions to handle:
 	Client:
-		+UnicodeEncodeError
+
 	Server:
 		
