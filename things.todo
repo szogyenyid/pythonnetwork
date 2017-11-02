@@ -1,7 +1,6 @@
 Client:
-	+ handle possible exceptions (UnicodeEncodeError, ConnectionResetError)
+	+ handle kicking
 Server:
-	+ handle possible exceptions (ConnectionResetError)
 	+ method for handling server commands
 	+ maximum number of users
 	+ reset command
@@ -9,3 +8,9 @@ Server:
 	+ password protected server
 	+ kick users command
 	+ don't allow the same name for 2 users
+Exceptions to handle:
+	Client:
+		+UnicodeEncodeError
+		+ConnectionResetError
+	Server:
+		+ConnectionResetError
