@@ -86,9 +86,15 @@ class chatUser(threading.Thread):
 				gotMsg = self.socket.recv(1024)
 				msg = str(gotMsg.decode('ascii'))
 				self.handleMessage(msg)
-			except ConnectionResetError:
+			except (ConnectionResetError):
 				print("%s forced to quit the client." % self.name)
 				self.kill()
+			except (ConnectionAbortedError):
+				if (self.isAlive()):
+					print("Connection to %s aborted." % self.name)
+				else:
+					pass
+					
 
 #connectionThread takes care of new connections, and adds new users to the users list
 class connectionThread (threading.Thread):
@@ -116,6 +122,7 @@ class commandThread (threading.Thread):
 		threading.Thread.__init__(self)
 	def handleCommand(self, command):
 		global servercommands
+		global users
 		if (command in servercommands):
 			if(command == "!users"):
 				listOfUsers()
@@ -123,6 +130,13 @@ class commandThread (threading.Thread):
 				msg = input("Send to all users: ")
 				noti = input("Notification? ")
 				sendAll(msg, noti)
+			if(command == "!kick"):
+				name = input("Who would you like to kick? ")
+				kickIndex = getUserIndex(name)
+				if (type(kickIndex) is int):
+					users[kickIndex].kick()
+				else:
+					return
 		else:
 			print("Unknown command")
 	def run(self):
@@ -163,12 +177,13 @@ def sendAllBut(user, message, n):
 	msg = ""
 def getUserIndex(name):
 	for x in users:
-		if(x.name == name):
+		if(x.name.lower() == name.lower()):
 			return users.index(x)
+	print("No user found with this name.")
 				
 users = [] #array for single listeners
 usercommands = ["!quit", "!name"]
-servercommands = ["!users", "!sendall"]
+servercommands = ["!users", "!sendall", "!kick"]
 nextID = 0
 userNum = 0
 running = True

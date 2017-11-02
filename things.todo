@@ -5,7 +5,6 @@ Server:
 	+ reset command
 	+ shut down command
 	+ password protected server
-	+ kick users command
 	+ don't allow the same name for 2 users
 Exceptions to handle:
 	Client:
