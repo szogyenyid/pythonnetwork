@@ -38,18 +38,21 @@ class chatUser(threading.Thread):
 		else:
 			joinNoti = ("%s is now known as %s" % (oldName, newName))
 		sendAll(joinNoti, True)
-	def quit(self):
+	def kill(self):
 		global userNum
-		msg = "*** Goodbye, dear user! :') ***"
-		self.socket.send(msg.encode('ascii'))
-		userNum = userNum-1
+		userNum -= 1
 		print("%s has quit, deleted his message listener and user" % self.name)
 		leaveNoti = ("%s has quit the server" % self.name)
-		sendAll(leaveNoti, True)
+		sendAllBut(self, leaveNoti, True)
 		self.socket.close()
 		index = getUserIndex(self.name)
 		users.pop(index)
 		self.runs = False
+	def quit(self):
+		global userNum
+		msg = "*** Goodbye, dear user! :') ***"
+		self.socket.send(msg.encode('ascii'))
+		self.kill()
 	def handleCommand(self, command):
 		if (command == "!quit"):
 			self.quit()
@@ -76,9 +79,13 @@ class chatUser(threading.Thread):
 		print("Single listener for %s is set up" % self.address)
 		self.changeName()
 		while (running and self.runs):
-			gotMsg = self.socket.recv(1024)
-			msg = str(gotMsg.decode('ascii'))
-			self.handleMessage(msg)
+			try:
+				gotMsg = self.socket.recv(1024)
+				msg = str(gotMsg.decode('ascii'))
+				self.handleMessage(msg)
+			except ConnectionResetError:
+				print("%s forced to quit the client." % self.name)
+				self.kill()
 
 #connectionThread takes care of new connections, and adds new users to the users list
 class connectionThread (threading.Thread):
@@ -136,6 +143,18 @@ def sendAll(message, n):
 		msg = ("SysOp: %s" % message)
 	for x in users:
 		x.socket.send(msg.encode('ascii'))
+	print("%s  -- sent to all" % msg) 
+	msg = ""
+def sendAllBut(user, message, n):
+	if(n=="1" or n=="y" or n==True or n=="true" or n=="yes"):
+		msg = ("* %s *" % message)
+	else:
+		msg = ("SysOp: %s" % message)
+	for x in users:
+		if (x == user):
+			continue
+		else:
+			x.socket.send(msg.encode('ascii'))
 	print("%s  -- sent to all" % msg) 
 	msg = ""
 def getUserIndex(name):
