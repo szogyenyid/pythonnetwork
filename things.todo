@@ -1,5 +1,5 @@
 Client:
-	+ handle kicking
+
 Server:
 	+ maximum number of users
 	+ reset command

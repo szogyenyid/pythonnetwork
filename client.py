@@ -11,7 +11,7 @@ class commandThread (threading.Thread):
 		while running:
 			data = input("")
 			time.sleep(1)
-		print("Command thread terminated")
+		#print("Command thread terminated")
 
 class processThread (threading.Thread):
 	def __init__(self):
@@ -32,7 +32,7 @@ class processThread (threading.Thread):
 			else:
 				serversocket.send(data.encode('ascii'))
 				data = ""
-		print("Process thread terminated")
+		#print("Process thread terminated")
 				
 class listenThread (threading.Thread):
 	def __init__(self):
@@ -48,7 +48,7 @@ class listenThread (threading.Thread):
 			except ConnectionResetError:
 				print("Connection to the server aborted. Press a key to continue.")
 				running = False
-		print("Listen thread terminated")
+		#print("Listen thread terminated")
 			
 				
 def makeConnection():
