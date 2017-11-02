@@ -9,6 +9,5 @@ Server:
 Exceptions to handle:
 	Client:
 		+UnicodeEncodeError
-		+ConnectionResetError
 	Server:
 		

@@ -38,12 +38,16 @@ class listenThread (threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
 	def run(self):
-		global runnging
+		global running
 		while running:
-			msg = serversocket.recv(1024)
-			if (len(msg.decode('ascii')) > 0):
-				print (msg.decode('ascii'))
-				msg = ""
+			try:
+				msg = serversocket.recv(1024)
+				if (len(msg.decode('ascii')) > 0):
+					print (msg.decode('ascii'))
+					msg = ""
+			except ConnectionResetError:
+				print("Connection to the server aborted. Press a key to continue.")
+				running = False
 		print("Listen thread terminated")
 			
 				
