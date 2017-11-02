@@ -13,4 +13,4 @@ Exceptions to handle:
 		+UnicodeEncodeError
 		+ConnectionResetError
 	Server:
-		+ConnectionResetError
+		
