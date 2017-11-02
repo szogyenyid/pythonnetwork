@@ -29,30 +29,36 @@ class chatUser(threading.Thread):
 			oldName = self.name
 			msg = "Please enter your new name:"
 			self.socket.send(msg.encode('ascii'))
-		msg = self.socket.recv(1024)
-		newName = str(msg.decode('ascii'))
-		self.name = newName
-		print("%s is now known as %s\n" % (self.address, newName))
-		if(justConnected):
-			joinNoti = ("%s connected to the server" %newName)
-		else:
-			joinNoti = ("%s is now known as %s" % (oldName, newName))
-		sendAll(joinNoti, True)
+		try:
+			msg = self.socket.recv(1024)
+			newName = str(msg.decode('ascii'))
+			self.name = newName
+			print("%s is now known as %s\n" % (self.address, newName))
+			if(justConnected):
+				joinNoti = ("%s connected to the server" %newName)
+			else:
+				joinNoti = ("%s is now known as %s" % (oldName, newName))
+			sendAll(joinNoti, True)
+		except ConnectionResetError:
+			print("%s forced to quit the client." % self.name)
+			self.kill()
 	def kill(self):
 		global userNum
 		userNum -= 1
 		print("%s has quit, deleted his message listener and user" % self.name)
-		leaveNoti = ("%s has quit the server" % self.name)
-		sendAllBut(self, leaveNoti, True)
 		self.socket.close()
 		index = getUserIndex(self.name)
 		users.pop(index)
 		self.runs = False
 	def kick(self):
+		leaveNoti = ("%s has quit the server" % self.name)
+		sendAllBut(self, leaveNoti, True)
 		msg = "*** You have been kicked from the server! ***"
 		self.socket.send(msg.encode('ascii'))
 		self.kill()
 	def quit(self):
+		leaveNoti = ("%s has quit the server" % self.name)
+		sendAllBut(self, leaveNoti, True)
 		msg = "*** Goodbye, dear user! :') ***"
 		self.socket.send(msg.encode('ascii'))
 		self.kill()
