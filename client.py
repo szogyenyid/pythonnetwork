@@ -39,6 +39,9 @@ class processThread (threading.Thread):
 				except UnicodeEncodeError:
 					print("Please use only Unicode characters!")
 					data = ""
+				except ConnectionResetError:
+					print("Connection to the server aborted. Press a key to continue.")
+					running = False
 		#print("Process thread terminated")
 				
 class listenThread (threading.Thread):
@@ -63,18 +66,19 @@ def makeConnection():
 	global host
 	global port
 	serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	print("Socket created")
+	#print("Socket created")
 	host = input("Please enter the IP you would like to connect to: ")
 	port = int(input("The port you would like to use: "))
 	serversocket.connect((host,port))
 	print("Connected to %s \n" % str((host,port)))
 def closeConnection():
 	serversocket.close()
-	
-makeConnection()
-#doing stuff
+
+
 data = ""
 running = True
+
+makeConnection()
 processTh = processThread()
 listenTh = listenThread()
 commandTh = commandThread()
@@ -84,6 +88,6 @@ commandTh.start()
 processTh.join()
 listenTh.join()
 commandTh.join()
-#doing stuff ends
 closeConnection()
+
 dummy = input("Exit with enter")
