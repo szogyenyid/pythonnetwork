@@ -24,7 +24,7 @@ Server:
 	users: The list of currect users. It's elements are chatUser class instances.
 	usercommands: The list of commands that the users can use. If a received message is a usercommand, it's not sent to other users.
 	servercommands: The list of commands that can be used in the server.
-	nextID: The ID of the user, it can't be the same for 2 users, even if one is offline.
+	nextID: The ID of next connection, it can't be the same for 2 connections, even if they are from the same user.
 	userNum: The number of current users connected to the server.
 	running: A boolean value. While it's True, the server is running.
 	command: The string containing the command the server last got as input.	
@@ -47,13 +47,17 @@ Server:
 	class chatUser:
 		A class for every chat user connected.
 		
-		id:
-		name:
-		address:
-		socket:
+		id: The unique ID of the connection.
+		name: The shown username. Each user must have a name to use the chat. It can be changed.
+		address: The IP address of the user.
+		socket:	The socket used for connection with the user.
 		
 		changeName(name):
+			Prompts the user for a new name, and sets it. 
+			Calls sendAll() to notify other users about the name change.
 		kill():
+			Closes the connection to the user.
+			Pops the user from the users list. Lowers userNum.
 		kick():
 		quit():
 		handleCommand(command):
