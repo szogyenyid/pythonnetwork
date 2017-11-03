@@ -56,7 +56,10 @@ class listenThread (threading.Thread):
 					print (msg.decode('ascii'))
 					msg = ""
 			except ConnectionResetError:
-				print("Connection to the server aborted. Press a key to continue.")
+				print("Connection to the server closed. Press a key to continue.")
+				running = False
+			except ConnectionAbortedError:
+				print("Connection to the server aborted.")
 				running = False
 		#print("Listen thread terminated")
 			
