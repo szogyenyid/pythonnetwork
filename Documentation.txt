@@ -2,48 +2,53 @@ Client:
 	data: The last input the client got from the user.
 	running: True, while the client is running. Exit when set to False.
 	serversocket: The socket opened for connection to the server.
-	
-	makeConnection():
-		Prompts the user to add the IP and Port of the server, creates a socket, and connects to the server.
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
 	closeConnection():
 		Closes the socket to the server.
-	
+	makeConnection():
+		Prompts the user to add the IP and Port of the server, creates a socket, and connects to the server.
+---------------------------------------------------------------------------------------------------------------------------------------------------------
 	class commandThread:
 		Constantly looking for user input, only accepts Unicode.
-	class processThread:
-		Constantly watching the "data" variable, and processing it.
-		If data is "!quit", exits the client. Else sends it to the server as a message.
-		If message couldn't be sent because the server closed, quits the client.
 	class listenThread:
 		Constantly waiting for messages from server.
 		If a message is received, prints it to the console.
 		If server is closed, exits the client.
-		
-		
+	class processThread:
+		Constantly watching the "data" variable, and processing it.
+		If data is "!quit", exits the client. Else sends it to the server as a message.
+		If message couldn't be sent because the server closed, quits the client.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------	
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Server:
-	users: The list of currect users. It's elements are chatUser class instances.
-	usercommands: The list of commands that the users can use. If a received message is a usercommand, it's not sent to other users.
-	servercommands: The list of commands that can be used in the server.
-	nextID: The ID of next connection, it can't be the same for 2 connections, even if they are from the same user.
-	userNum: The number of current users connected to the server.
-	running: A boolean value. While it's True, the server is running.
-	command: The string containing the command the server last got as input.	
+	command: The string containing the command the server last got as input.
 	message: The last message sent to the users.
-	
-	makeConnection():
-		Prompts the server's starter for his IP and Port, then creates a socket on that address, and listens on it.
+	nextID: The ID of next connection, it can't be the same for 2 connections, even if they are from the same user.
+	running: A boolean value. While it's True, the server is running.
+	servercommands: The list of commands that can be used in the server.
+	usercommands: The list of commands that the users can use. If a received message is a usercommand, it's not sent to other users.
+	userNum: The number of current users connected to the server.
+	users: The list of currect users. It's elements are chatUser class instances.
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+	getUserIndex(name):
+		Returns the index of the user given in parameter.
+		First, it checks the users for name, if no user found, checks for address.
+		Doesn't return (returns NoneType) if no user is found.
 	listOfUsers():
 		Prints the list of online users in a form of "ID Name Address".
+	makeConnection():
+		Prompts the server's starter for his IP and Port, then creates a socket on that address, and listens on it.
 	sendAll(message, n):
 		Sends the parameter message to all users.
 		Expects a boolean "n" parameter, which defines if the message is a server notification, or a message from SysOp.
 	sendAllBut(user, message, n):
 		Same as sendAll, but doesn't send the message to the user got as parameter.
-	getUserIndex(name):
-		Returns the index of the user given in parameter.
-		First, it checks the users for name, if no user found, checks for address.
-		Doesn't return (returns NoneType) if no user is found.
-		
+---------------------------------------------------------------------------------------------------------------------------------------------------------		
 	class chatUser:
 		A class for every chat user connected.
 		
@@ -51,6 +56,7 @@ Server:
 		name: The shown username. Each user must have a name to use the chat. It can be changed.
 		address: The IP address of the user.
 		socket:	The socket used for connection with the user.
+		runs: Boolean value, indicating if the client is connected.
 		
 		changeName(name):
 			Prompts the user for a new name, and sets it. 
@@ -59,16 +65,22 @@ Server:
 			Closes the connection to the user.
 			Pops the user from the users list. Lowers userNum.
 		kick():
+			Sends a kick notification and kills the connection.
 		quit():
+			Sends a quit notification and kills the connection.
 		handleCommand(command):
+			Handles the command got in parameter, and calls the matching method.
 		handleMessage(msg):
-		
+			Identifies if the data got from the user is a command or message. If it's a command, passes it to the handleCommand method, else sends it as a message.
+---------------------------------------------------------------------------------------------------------------------------------------------------------		
 	class connectionThread:
+		Takes care of new connections, adds new users to the users list, starts their thread.
+---------------------------------------------------------------------------------------------------------------------------------------------------------		
 	class commandThread:
+		Processes the server terminal commands.
 		
-		
-		
-		
-		
-		
-		
+		handleCommand(command):
+			Handles the command got in parameter, and calls the matching server function.
+---------------------------------------------------------------------------------------------------------------------------------------------------------		
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
