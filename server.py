@@ -145,6 +145,7 @@ class commandThread (threading.Thread):
 					return
 		else:
 			print("Unknown command")
+	
 	def run(self):
 		print("Command thread initialized.")
 		global command
@@ -185,7 +186,10 @@ def getUserIndex(name):
 	for x in users:
 		if(x.name.lower() == name.lower()):
 			return users.index(x)
-	print("No user found with this name.")
+	for x in users:
+		if(x.address() == name):
+			return users.index(x)
+	print("No user found with this name or address.")
 				
 users = [] #array for single listeners
 usercommands = ["!quit", "!name"]
