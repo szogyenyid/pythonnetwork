@@ -40,7 +40,9 @@ class chatUser(threading.Thread):
 				joinNoti = ("%s is now known as %s" % (oldName, newName))
 			sendAll(joinNoti, True)
 		except ConnectionResetError:
-			print("%s forced to quit the client." % self.name)
+			leaveNoti = ("%s forced to quit the client." % self.name)
+			print(leaveNoti)
+			sendAllBut(self, leaveNoti, True)
 			self.kill()
 	def kill(self):
 		global userNum
@@ -93,8 +95,10 @@ class chatUser(threading.Thread):
 				msg = str(gotMsg.decode('ascii'))
 				self.handleMessage(msg)
 			except (ConnectionResetError):
-				print("%s forced to quit the client." % self.name)
-				self.quit()
+				leaveNoti = ("%s forced to quit the client." % self.name)
+				print(leaveNoti)
+				sendAllBut(self, leaveNoti, True)
+				self.kill()
 			except (ConnectionAbortedError):
 				if (self.isAlive()):
 					print("Connection to %s aborted." % self.name)
@@ -189,7 +193,7 @@ def getUserIndex(name):
 		if(x.name.lower() == name.lower()):
 			return users.index(x)
 	for x in users:
-		if(x.address() == name):
+		if(x.address == name):
 			return users.index(x)
 	print("No user found with this name or address.")
 				
