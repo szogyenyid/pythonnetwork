@@ -94,11 +94,13 @@ class chatUser(threading.Thread):
 				self.handleMessage(msg)
 			except (ConnectionResetError):
 				print("%s forced to quit the client." % self.name)
-				self.kill()
+				self.quit()
 			except (ConnectionAbortedError):
 				if (self.isAlive()):
 					print("Connection to %s aborted." % self.name)
+					runs = False
 				else:
+					runs = False
 					pass
 					
 
