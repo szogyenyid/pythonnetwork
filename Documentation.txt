@@ -1,0 +1,70 @@
+Client:
+	data: The last input the client got from the user.
+	running: True, while the client is running. Exit when set to False.
+	serversocket: The socket opened for connection to the server.
+	
+	makeConnection():
+		Prompts the user to add the IP and Port of the server, creates a socket, and connects to the server.
+	closeConnection():
+		Closes the socket to the server.
+	
+	class commandThread:
+		Constantly looking for user input, only accepts Unicode.
+	class processThread:
+		Constantly watching the "data" variable, and processing it.
+		If data is "!quit", exits the client. Else sends it to the server as a message.
+		If message couldn't be sent because the server closed, quits the client.
+	class listenThread:
+		Constantly waiting for messages from server.
+		If a message is received, prints it to the console.
+		If server is closed, exits the client.
+		
+		
+Server:
+	users: The list of currect users. It's elements are chatUser class instances.
+	usercommands: The list of commands that the users can use. If a received message is a usercommand, it's not sent to other users.
+	servercommands: The list of commands that can be used in the server.
+	nextID: The ID of the user, it can't be the same for 2 users, even if one is offline.
+	userNum: The number of current users connected to the server.
+	running: A boolean value. While it's True, the server is running.
+	command: The string containing the command the server last got as input.	
+	message: The last message sent to the users.
+	
+	makeConnection():
+		Prompts the server's starter for his IP and Port, then creates a socket on that address, and listens on it.
+	listOfUsers():
+		Prints the list of online users in a form of "ID Name Address".
+	sendAll(message, n):
+		Sends the parameter message to all users.
+		Expects a boolean "n" parameter, which defines if the message is a server notification, or a message from SysOp.
+	sendAllBut(user, message, n):
+		Same as sendAll, but doesn't send the message to the user got as parameter.
+	getUserIndex(name):
+		Returns the index of the user given in parameter.
+		First, it checks the users for name, if no user found, checks for address.
+		Doesn't return (returns NoneType) if no user is found.
+		
+	class chatUser:
+		A class for every chat user connected.
+		
+		id:
+		name:
+		address:
+		socket:
+		
+		changeName(name):
+		kill():
+		kick():
+		quit():
+		handleCommand(command):
+		handleMessage(msg):
+		
+	class connectionThread:
+	class commandThread:
+		
+		
+		
+		
+		
+		
+		
