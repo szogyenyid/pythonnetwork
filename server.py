@@ -22,14 +22,14 @@ class chatUser(threading.Thread):
 		self.socket = socket
 		self.runs = True
 	def changeName(self):
-		if(self.name == ""):
-			justConnected = True
-		else:
-			justConnected = False
-			oldName = self.name
-			msg = "Please enter your new name:"
-			self.socket.send(msg.encode('ascii'))
 		try:
+			if(self.name == ""):
+				justConnected = True
+			else:
+				justConnected = False
+				oldName = self.name
+				msg = "Please enter your new name:"
+				self.socket.send(msg.encode('ascii'))
 			msg = self.socket.recv(1024)
 			newName = str(msg.decode('ascii'))
 			self.name = newName
