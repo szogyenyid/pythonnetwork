@@ -112,21 +112,39 @@ class chatUser(threading.Thread):
 class connectionThread (threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
+		self.pswSucc = True
+	def getPass(self, clientsocket):
+		global password
+		passPrompt = "The server requires a password to enter. Please enter it:"
+		clientsocket.send(passPrompt.encode('ascii'))
+		userPass = clientsocket.recv(1024)
+		if (userPass.decode('ascii') != password):
+			msg = "The password you entered is wrong."
+			clientsocket.send(msg.encode('ascii'))
+			self.pswSucc = False
 	def run(self):
 		print("Connections thread initialized.\n")
 		global userNum
 		global running
+		global password
 		global nextID
 		while running:			
 			clientsocket,addr = serversocket.accept()
 			user = chatUser(nextID, "", str(addr[0]), clientsocket)
-			userNum += 1
-			nextID += 1
-			print("Got a connection from %s, total users: %d" % ( user.address, userNum))
-			msg = "*** Welcome to the server! Please enter your name: ***"
-			clientsocket.send(msg.encode('ascii'))
-			users.append(user)
-			users[(len(users)-1)].start()
+			if (password != ""):
+				self.getPass(clientsocket)
+			if (self.pswSucc):
+				userNum += 1
+				nextID += 1
+				print("Got a connection from %s, total users: %d" % ( user.address, userNum))
+				msg = "*** Welcome to the server! Please enter your name: ***"
+				clientsocket.send(msg.encode('ascii'))
+				users.append(user)
+				users[(len(users)-1)].start()
+			else:
+				clientsocket.send("Authentication failed.".encode('ascii'))
+				clientsocket.close()
+				self.pswSucc = True
 						
 #commandThread is processing the server terminal commands
 class commandThread (threading.Thread):
@@ -200,6 +218,7 @@ def getUserIndex(name):
 users = [] #array for single listeners
 usercommands = ["!quit", "!name"]
 servercommands = ["!users", "!sendall", "!kick"]
+password = "pass"
 nextID = 0
 userNum = 0
 running = True

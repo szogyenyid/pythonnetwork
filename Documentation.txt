@@ -28,6 +28,7 @@ Server:
 	command: The string containing the command the server last got as input.
 	message: The last message sent to the users.
 	nextID: The ID of next connection, it can't be the same for 2 connections, even if they are from the same user.
+	password: The password for accessing the server
 	running: A boolean value. While it's True, the server is running.
 	servercommands: The list of commands that can be used in the server.
 	usercommands: The list of commands that the users can use. If a received message is a usercommand, it's not sent to other users.
@@ -75,6 +76,11 @@ Server:
 ---------------------------------------------------------------------------------------------------------------------------------------------------------		
 	class connectionThread:
 		Takes care of new connections, adds new users to the users list, starts their thread.
+		
+		pswSucc: Boolean value, indicating if the user entered the correct password.
+		
+		getPass(clientsocket):
+			Prompts the user for the server password, checks if it's right.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------		
 	class commandThread:
 		Processes the server terminal commands.
