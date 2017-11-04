@@ -65,10 +65,18 @@ class chatUser(threading.Thread):
 		self.socket.send(msg.encode('ascii'))
 		self.kill()
 	def handleCommand(self, command):
+		global users
 		if (command == "!quit"):
 			self.quit()
 		if (command == "!name"):
 			self.changeName()
+		if (command == "!users"):
+			msg = ""
+			for x in users:
+				msg += x.name
+				msg += (", ")
+			msg = msg[:-2]
+			self.socket.send(msg.encode('ascii'))
 	def handleMessage(self, msg):
 		global usercommands
 		global message
@@ -216,7 +224,7 @@ def getUserIndex(name):
 	print("No user found with this name or address.")
 				
 users = [] #array for single listeners
-usercommands = ["!quit", "!name"]
+usercommands = ["!quit", "!name", "!users"]
 servercommands = ["!users", "!sendall", "!kick"]
 password = "pass"
 nextID = 0
