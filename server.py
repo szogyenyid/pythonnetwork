@@ -264,8 +264,13 @@ def shutDown(sec):
 	running = False
 	
 users = [] #array for users
+
 usercommands = ["!quit", "!name", "!users"]
+usercomdesc = ["Disconnect from server,and quit the client.","Change username.","List of online users."]
+
 servercommands = ["!users", "!sendall", "!kick", "!setpass", "!shutdown"]
+servercomdesc = ["List of online users.","Send a message for all users.","Kick a user.","Set password for server.","Shut down the server."]
+
 password = ""
 nextID = 0
 userNum = 0
