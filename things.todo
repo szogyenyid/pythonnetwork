@@ -4,7 +4,6 @@ Server:
 	+ maximum number of users
 	+ reset command
 	+ shut down command
-	+ don't allow the same name for 2 users
 Exceptions to handle:
 	Client:
 

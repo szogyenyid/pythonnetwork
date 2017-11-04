@@ -40,6 +40,8 @@ Server:
 		Returns the index of the user given in parameter.
 		First, it checks the users for name, if no user found, checks for address.
 		Doesn't return (returns NoneType) if no user is found.
+	nameIsValid(name):
+		Checks if the parameter name is available, and is not taken by another user. Return True is name is available, returns False else.
 	listOfUsers():
 		Prints the list of online users in a form of "ID Name Address".
 	makeConnection():
@@ -60,7 +62,7 @@ Server:
 		runs: Boolean value, indicating if the client is connected.
 		
 		changeName(name):
-			Prompts the user for a new name, and sets it. 
+			Prompts the user for a new name, checks if it's available, and sets it. 
 			Calls sendAll() to notify other users about the name change.
 		kill():
 			Closes the connection to the user.

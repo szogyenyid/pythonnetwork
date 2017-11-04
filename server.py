@@ -32,13 +32,18 @@ class chatUser(threading.Thread):
 				self.socket.send(msg.encode('ascii'))
 			msg = self.socket.recv(1024)
 			newName = str(msg.decode('ascii'))
-			self.name = newName
-			print("%s is now known as %s\n" % (self.address, newName))
-			if(justConnected):
-				joinNoti = ("%s connected to the server" %newName)
+			if(nameIsValid(newName)):
+				self.name = newName
+				print("%s is now known as %s\n" % (self.address, newName))
+				if(justConnected):
+					joinNoti = ("%s connected to the server" %newName)
+				else:
+					joinNoti = ("%s is now known as %s" % (oldName, newName))
+				sendAll(joinNoti, True)
 			else:
-				joinNoti = ("%s is now known as %s" % (oldName, newName))
-			sendAll(joinNoti, True)
+				msg = "Sorry, the name you chose is already taken. \nPlease enter another name: "
+				self.socket.send(msg.encode('ascii'))
+				self.changeName()
 		except ConnectionResetError:
 			leaveNoti = ("%s forced to quit the client." % self.name)
 			print(leaveNoti)
@@ -227,7 +232,12 @@ def getUserIndex(name):
 		if(x.address == name):
 			return users.index(x)
 	print("No user found with this name or address.")
-				
+def nameIsValid(name):
+	for x in users:
+		if(x.name.lower() == name.lower()):
+			return False
+	return True
+	
 users = [] #array for single listeners
 usercommands = ["!quit", "!name", "!users"]
 servercommands = ["!users", "!sendall", "!kick", "!setpass"]
