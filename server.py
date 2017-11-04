@@ -161,6 +161,7 @@ class commandThread (threading.Thread):
 	def handleCommand(self, command):
 		global servercommands
 		global users
+		global password
 		if (command in servercommands):
 			if(command == "!users"):
 				listOfUsers()
@@ -175,6 +176,10 @@ class commandThread (threading.Thread):
 					users[kickIndex].kick()
 				else:
 					return
+			if(command == "!setpass"):
+				newPass = input("What would you like for new server password? ")
+				password = newPass
+				print("New password is set to \"%s\" \n" % password)
 		else:
 			print("Unknown command")
 	
@@ -225,8 +230,8 @@ def getUserIndex(name):
 				
 users = [] #array for single listeners
 usercommands = ["!quit", "!name", "!users"]
-servercommands = ["!users", "!sendall", "!kick"]
-password = "pass"
+servercommands = ["!users", "!sendall", "!kick", "!setpass"]
+password = ""
 nextID = 0
 userNum = 0
 running = True
