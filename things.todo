@@ -4,7 +4,6 @@ Server:
 	+ !help lists all available commands
 	+ maximum number of users
 	+ reset command
-	+ shut down command
 
 Exceptions to handle:
 	Client:
@@ -13,3 +12,4 @@ Exceptions to handle:
 Other:
 	+ write readme.md
 	+ convert documentation to .md
+	+ add server shutdown to documentation

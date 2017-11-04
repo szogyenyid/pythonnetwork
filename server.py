@@ -185,6 +185,9 @@ class commandThread (threading.Thread):
 				newPass = input("What would you like for new server password? ")
 				password = newPass
 				print("New password is set to \"%s\" \n" % password)
+			if(command == "!shutdown"):
+				secs = input("How many seconds would you like before shutting down? ")
+				shutDown(secs)
 		else:
 			print("Unknown command")
 	
@@ -237,10 +240,32 @@ def nameIsValid(name):
 		if(x.name.lower() == name.lower()):
 			return False
 	return True
+def killAll():
+		for x in users:
+			x.kill()
+def shutDown(sec):
+	msg = ("\nAttention!\nThe server will shut down in %s seconds! Please leave the server.\n" % str(sec))
+	sendAll(msg, True)
+	timeLeft = int(sec)
 	
-users = [] #array for single listeners
+	while(timeLeft > 0):
+		if (timeLeft>15):
+			msg = ("Shutting down server in %s seconds." % timeLeft)
+			sendAll(msg, True)
+			time.sleep(15)
+			timeLeft -= 15
+		else:
+			msg = ("Shutting down server in %s seconds." % timeLeft)
+			sendAll(msg, True)
+			time.sleep(timeLeft)
+			timeLeft = 0
+	killAll()
+	print("Killed all connections.")
+	running = False
+	
+users = [] #array for users
 usercommands = ["!quit", "!name", "!users"]
-servercommands = ["!users", "!sendall", "!kick", "!setpass"]
+servercommands = ["!users", "!sendall", "!kick", "!setpass", "!shutdown"]
 password = ""
 nextID = 0
 userNum = 0
@@ -249,9 +274,13 @@ command = ""
 message = ""
 
 makeConnection()
+
 comThread = commandThread()
 comThread.start()
 conThread = connectionThread()
 conThread.start()
 
-#dummy = input("Exit with enter")
+conThread.join()
+comThread.join()
+
+dummy = input("Exit with enter")

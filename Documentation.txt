@@ -40,10 +40,12 @@ Server:
 		Returns the index of the user given in parameter.
 		First, it checks the users for name, if no user found, checks for address.
 		Doesn't return (returns NoneType) if no user is found.
-	nameIsValid(name):
-		Checks if the parameter name is available, and is not taken by another user. Return True is name is available, returns False else.
+	killAll():
+		Kills all connections on server.
 	listOfUsers():
 		Prints the list of online users in a form of "ID Name Address".
+	nameIsValid(name):
+		Checks if the parameter name is available, and is not taken by another user. Return True is name is available, returns False else.
 	makeConnection():
 		Prompts the server's starter for his IP and Port, then creates a socket on that address, and listens on it.
 	sendAll(message, n):
