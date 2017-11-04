@@ -1,11 +1,15 @@
 Client:
-
+	+ !help lists all available commands
 Server:
+	+ !help lists all available commands
 	+ maximum number of users
 	+ reset command
 	+ shut down command
+
 Exceptions to handle:
 	Client:
-
 	Server:
 		
+Other:
+	+ write readme.md
+	+ convert documentation to .md
