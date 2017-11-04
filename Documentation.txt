@@ -20,7 +20,7 @@ Client:
 		If data is "!quit", exits the client. Else sends it to the server as a message.
 		If message couldn't be sent because the server closed, quits the client.
 
----------------------------------------------------------------------------------------------------------------------------------------------------------	
+---------------------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ Server:
 	servercommands: The list of commands that can be used in the server.
 	usercommands: The list of commands that the users can use. If a received message is a usercommand, it's not sent to other users.
 	userNum: The number of current users connected to the server.
-	users: The list of currect users. It's elements are chatUser class instances.
+	users: The list of current users. It's elements are chatUser class instances.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 	getUserIndex(name):
@@ -53,7 +53,10 @@ Server:
 		Expects a boolean "n" parameter, which defines if the message is a server notification, or a message from SysOp.
 	sendAllBut(user, message, n):
 		Same as sendAll, but doesn't send the message to the user got as parameter.
----------------------------------------------------------------------------------------------------------------------------------------------------------		
+	shutDown(sec):
+		Warnings all users that server will shut down, and tells every 15 seconds in all chat.
+		When the parameter time hits zero, all the connections are killed, and the server shuts down.
+---------------------------------------------------------------------------------------------------------------------------------------------------------
 	class chatUser:
 		A class for every chat user connected.
 		
@@ -77,7 +80,7 @@ Server:
 			Handles the command got in parameter, and calls the matching method.
 		handleMessage(msg):
 			Identifies if the data got from the user is a command or message. If it's a command, passes it to the handleCommand method, else sends it as a message.
----------------------------------------------------------------------------------------------------------------------------------------------------------		
+---------------------------------------------------------------------------------------------------------------------------------------------------------
 	class connectionThread:
 		Takes care of new connections, adds new users to the users list, starts their thread.
 		
@@ -85,12 +88,12 @@ Server:
 		
 		getPass(clientsocket):
 			Prompts the user for the server password, checks if it's right.
----------------------------------------------------------------------------------------------------------------------------------------------------------		
+---------------------------------------------------------------------------------------------------------------------------------------------------------
 	class commandThread:
 		Processes the server terminal commands.
 		
 		handleCommand(command):
 			Handles the command got in parameter, and calls the matching server function.
----------------------------------------------------------------------------------------------------------------------------------------------------------		
+---------------------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
