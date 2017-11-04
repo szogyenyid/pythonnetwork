@@ -1,10 +1,14 @@
 Client:
-	+ !help lists all available commands
+	+ config file
+	+ log messages
 Server:
-	+ !help lists all available commands
+	+ config file
+	+ user status message
+	+ !help lists all available commands (user and client)
 	+ maximum number of users
 	+ reset command
-
+	+ send file
+	
 Exceptions to handle:
 	Client:
 	Server:

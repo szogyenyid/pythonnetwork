@@ -119,7 +119,6 @@ class chatUser(threading.Thread):
 				else:
 					runs = False
 					pass
-					
 
 #connectionThread takes care of new connections, and adds new users to the users list
 class connectionThread (threading.Thread):
@@ -158,7 +157,7 @@ class connectionThread (threading.Thread):
 				clientsocket.send("Authentication failed.".encode('ascii'))
 				clientsocket.close()
 				self.pswSucc = True
-						
+
 #commandThread is processing the server terminal commands
 class commandThread (threading.Thread):
 	def __init__(self):
