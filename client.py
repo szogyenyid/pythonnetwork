@@ -73,15 +73,30 @@ def makeConnection():
 	print("Connected to %s \n" % str((host,port)))
 def closeConnection():
 	serversocket.close()
+def trimSettings():
+	settings[0] = settings[0][14:-1]
+	settings[1] = settings[1][10:-1]
+	settings[2] = settings[2][12:-1]
+	settings[3] = settings[3][10:]
 def initSettings():
 	cfgFile = open("cconfig.cfg", "r")
-	
+	line = "empty"
+	while (line != ""):
+		line = cfgFile.readline()
+		settings.append(line)
 	cfgFile.close()
+	settings.pop()
+	trimSettings()
+	for x in settings:
+		print ("|%s|"%x)
+		
 
 data = ""
 running = True
+settings = []
 
 makeConnection()
+initSettings()
 processTh = processThread()
 listenTh = listenThread()
 commandTh = commandThread()
