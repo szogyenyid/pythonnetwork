@@ -74,7 +74,9 @@ def makeConnection():
 def closeConnection():
 	serversocket.close()
 def initSettings():
+	cfgFile = open("cconfig.cfg", "r")
 	
+	cfgFile.close()
 
 data = ""
 running = True
