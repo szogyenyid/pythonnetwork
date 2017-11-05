@@ -61,6 +61,10 @@ class listenThread (threading.Thread):
 				running = False
 			
 				
+def toBool(value):
+	if value in trueSins:
+		return True
+	return False
 def makeConnection():
 	global serversocket
 	global host
@@ -74,10 +78,10 @@ def makeConnection():
 def closeConnection():
 	serversocket.close()
 def trimSettings():
-	settings[0] = settings[0][14:-1]
+	settings[0] = toBool(settings[0][14:-1])
 	settings[1] = settings[1][10:-1]
 	settings[2] = settings[2][12:-1]
-	settings[3] = settings[3][10:]
+	settings[3] = toBool(settings[3][10:])
 def initSettings():
 	cfgFile = open("cconfig.cfg", "r")
 	line = "empty"
@@ -88,9 +92,10 @@ def initSettings():
 	settings.pop()
 	trimSettings()
 	for x in settings:
-		print ("|%s|"%x)
+		print("Value: %s, Type: %s" % (x, type(x)))
 		
 
+trueSins = ["True","true","1"]
 data = ""
 running = True
 settings = []
