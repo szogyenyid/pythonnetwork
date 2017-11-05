@@ -1,5 +1,4 @@
 Client:
-	+ config file
 	+ log messages
 Server:
 	+ config file
@@ -16,3 +15,4 @@ Exceptions to handle:
 Other:
 	+ write readme.md
 	+ convert documentation to .md
+	+ document settings in client
