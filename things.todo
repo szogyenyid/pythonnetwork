@@ -1,5 +1,4 @@
 Client:
-	+ full refactor maybe?
 	+ config file
 	+ log messages
 Server:

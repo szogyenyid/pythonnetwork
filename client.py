@@ -14,7 +14,6 @@ class commandThread (threading.Thread):
 				time.sleep(1)
 			except UnicodeEncodeError:
 				print("Please use only Unicode characters!")
-		#print("Command thread terminated")
 
 class processThread (threading.Thread):
 	def __init__(self):
@@ -42,7 +41,6 @@ class processThread (threading.Thread):
 				except ConnectionResetError:
 					print("Connection to the server aborted. Press a key to continue.")
 					running = False
-		#print("Process thread terminated")
 				
 class listenThread (threading.Thread):
 	def __init__(self):
@@ -61,7 +59,6 @@ class listenThread (threading.Thread):
 			except ConnectionAbortedError:
 				print("Connection to the server aborted.")
 				running = False
-		#print("Listen thread terminated")
 			
 				
 def makeConnection():
@@ -76,7 +73,8 @@ def makeConnection():
 	print("Connected to %s \n" % str((host,port)))
 def closeConnection():
 	serversocket.close()
-
+def initSettings():
+	
 
 data = ""
 running = True
