@@ -2,12 +2,16 @@ Client:
 	data: The last input the client got from the user.
 	running: True, while the client is running. Exit when set to False.
 	serversocket: The socket opened for connection to the server.
+	settings: A list containing the values of each setting.
+	trueSins: The synonymes of "True"
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 	closeConnection():
 		Closes the socket to the server.
 	makeConnection():
 		Prompts the user to add the IP and Port of the server, creates a socket, and connects to the server.
+	initSettings():
+		Opens cconfig.cfg, and 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 	class commandThread:
 		Constantly looking for user input, only accepts Unicode.
